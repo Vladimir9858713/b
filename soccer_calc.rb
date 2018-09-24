@@ -1,5 +1,5 @@
-class Command
-  include Comparable
+class Team
+  # include Comparable
 
   attr_accessor :name, :rank
 
@@ -9,11 +9,11 @@ class Command
   end
 
   def add_rank (n)
-    @rank+=n
+    @rank += n
   end
 
   def <=> (other)
-    self.rank==other.rank ? (self.name<=>other.name) : (self.rank <=> other.rank)
+    self.rank == other.rank ? (self.name <=> other.name) : (self.rank <=> other.rank)
   end
 
   def to_s
@@ -23,12 +23,14 @@ end
 
 class SoccerCalc
 
-  file = File.open(ARGV[0], "r")
+  # file = File.open(ARGV[0], "r")
+  file = File.open("./input_data.txt", "r")
   raw_string = file.read
   plate_string = raw_string.delete("\n")
-  commands_names = plate_string.split(/\s\d+,? ?/)
-  commands = {}
-  commands_names.each {|n| commands[n] = Command.new(n)}
+  teams_names = plate_string.split(/\s\d+,? ?/)
+
+  teams = {}
+  teams_names.each {|n| teams[n] = Team.new(n)}
   games = raw_string.split("\n")
 
   games.each do |game|
@@ -36,16 +38,16 @@ class SoccerCalc
     names = game.split(/\s\d+,? ?/)
 
     if counts[0] > counts[1]
-      commands[names[0]].add_rank(3)
+      teams[names[0]].add_rank(3)
     elsif counts[0] < counts[1]
-      commands[names[1]].add_rank(3)
+      teams[names[1]].add_rank(3)
     else
-      commands[names[0]].add_rank(1)
-      commands[names[1]].add_rank(1)
+      teams[names[0]].add_rank(1)
+      teams[names[1]].add_rank(1)
     end
   end
 
-  sorted_command = commands.values.sort
-  puts sorted_command
+  sorted_teams = teams.values.sort
+  puts sorted_teams
 
 end
